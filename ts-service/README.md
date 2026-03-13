@@ -37,11 +37,9 @@ cp .env.example .env
 - `PORT`
 - `DATABASE_URL`
 - `NODE_ENV`
-- `GEMINI_API_KEY` (leave blank unless implementing a real provider)
+- `GEMINI_API_KEY`: Required for real LLM summarization. Get a free key at [Google AI Studio](https://aistudio.google.com/). Leave blank to see a startup error; for tests a fake provider is used automatically.
 
-Do not commit API keys or secrets.
-
-Candidates may create a free Gemini API key through Google AI Studio for the full assessment implementation.
+Do not commit API keys or other secrets to your repository. Use environment variables and include setup instructions in your README.
 
 ## Run Migrations
 

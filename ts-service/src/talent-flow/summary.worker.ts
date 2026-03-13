@@ -70,11 +70,14 @@ export class SummaryWorker implements OnModuleInit {
             summary.concerns = result.concerns.join('\n');
             summary.decision = result.recommendedDecision;
             summary.provider = 'gemini';
+            summary.promptVersion = 'v1';
+            summary.errorMessage = null;
 
             await this.summaryRepo.save(summary);
         } catch (error) {
             console.error(`Failed to process summary ${summary.id}:`, error);
             summary.status = 'failed';
+            summary.errorMessage = error instanceof Error ? error.message : String(error);
             await this.summaryRepo.save(summary);
         }
     }

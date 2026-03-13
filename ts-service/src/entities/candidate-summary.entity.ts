@@ -39,6 +39,12 @@ export class CandidateSummary {
     @Column({ type: 'varchar', length: 50, nullable: true })
     provider!: string | null;
 
+    @Column({ name: 'prompt_version', type: 'varchar', length: 50, nullable: true })
+    promptVersion!: string | null;
+
+    @Column({ name: 'error_message', type: 'text', nullable: true })
+    errorMessage!: string | null;
+
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt!: Date;
 

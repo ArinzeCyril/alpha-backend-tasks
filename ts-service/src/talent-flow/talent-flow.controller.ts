@@ -14,7 +14,7 @@ import { DocumentService } from './document.service';
 import { SummaryService } from './summary.service';
 import { CreateCandidateDocumentDto } from './dto/create-candidate-document.dto';
 
-@Controller('candidates/:id')
+@Controller('candidates/:candidateId')
 @UseGuards(FakeAuthGuard)
 export class TalentFlowController {
     constructor(
@@ -24,7 +24,7 @@ export class TalentFlowController {
 
     @Post('documents')
     async uploadDocument(
-        @Param('id') candidateId: string,
+        @Param('candidateId') candidateId: string,
         @Body() dto: CreateCandidateDocumentDto,
         @CurrentUser() user: AuthUser,
     ) {
@@ -32,17 +32,35 @@ export class TalentFlowController {
     }
 
     @Get('documents')
-    async getDocuments(@Param('id') candidateId: string, @CurrentUser() user: AuthUser) {
+    async getDocuments(
+        @Param('candidateId') candidateId: string,
+        @CurrentUser() user: AuthUser,
+    ) {
         return this.documentService.getCandidateDocuments(user.workspaceId, candidateId);
     }
 
     @Post('summaries/generate')
-    async generateSummary(@Param('id') candidateId: string, @CurrentUser() user: AuthUser) {
+    async generateSummary(
+        @Param('candidateId') candidateId: string,
+        @CurrentUser() user: AuthUser,
+    ) {
         return this.summaryService.requestSummary(user.workspaceId, candidateId);
     }
 
-    @Get('summaries/latest')
-    async getLatestSummary(@Param('id') candidateId: string, @CurrentUser() user: AuthUser) {
-        return this.summaryService.getLatestSummary(user.workspaceId, candidateId);
+    @Get('summaries')
+    async listSummaries(
+        @Param('candidateId') candidateId: string,
+        @CurrentUser() user: AuthUser,
+    ) {
+        return this.summaryService.listSummaries(user.workspaceId, candidateId);
+    }
+
+    @Get('summaries/:summaryId')
+    async getSummaryById(
+        @Param('candidateId') candidateId: string,
+        @Param('summaryId') summaryId: string,
+        @CurrentUser() user: AuthUser,
+    ) {
+        return this.summaryService.getSummaryById(user.workspaceId, candidateId, summaryId);
     }
 }

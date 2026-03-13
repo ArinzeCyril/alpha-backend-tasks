@@ -70,4 +70,46 @@ export class SummaryService {
 
         return summary;
     }
+
+    async listSummaries(
+        workspaceId: string,
+        candidateId: string,
+    ): Promise<CandidateSummary[]> {
+        const candidate = await this.candidateRepo.findOne({
+            where: { id: candidateId, workspaceId },
+        });
+
+        if (!candidate) {
+            throw new NotFoundException('Candidate not found in this workspace');
+        }
+
+        return this.summaryRepo.find({
+            where: { candidateId },
+            order: { createdAt: 'DESC' },
+        });
+    }
+
+    async getSummaryById(
+        workspaceId: string,
+        candidateId: string,
+        summaryId: string,
+    ): Promise<CandidateSummary> {
+        const candidate = await this.candidateRepo.findOne({
+            where: { id: candidateId, workspaceId },
+        });
+
+        if (!candidate) {
+            throw new NotFoundException('Candidate not found in this workspace');
+        }
+
+        const summary = await this.summaryRepo.findOne({
+            where: { id: summaryId, candidateId },
+        });
+
+        if (!summary) {
+            throw new NotFoundException('Summary not found');
+        }
+
+        return summary;
+    }
 }
