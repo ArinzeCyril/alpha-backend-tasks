@@ -8,10 +8,11 @@ This service includes:
 - SQLAlchemy wiring
 - Manual SQL migration runner
 - One small `sample_items` example feature
-- Jinja template wiring with a minimal base template
-- Pytest setup
+- Jinja template wiring with professional report templates
+- Pytest setup with comprehensive briefing tests
+- **Briefing Generator**: Full implementation of company briefings, metrics, and report generation.
 
-The assessment-specific briefing features are intentionally not implemented.
+The assessment-specific briefing features are fully implemented.
 
 ## Prerequisites
 

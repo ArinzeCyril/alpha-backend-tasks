@@ -12,7 +12,7 @@ This service includes:
 - LLM provider abstraction with a fake summarization provider
 - Jest test setup
 
-The assessment-specific candidate document and summary workflow is intentionally not implemented.
+The assessment-specific candidate document and summary workflow is fully implemented.
 
 ## Prerequisites
 
@@ -81,3 +81,4 @@ Include these headers in requests:
 - `src/queue/`: in-memory queue abstraction
 - `src/llm/`: provider interface + fake provider
 - `src/migrations/`: TypeORM migration files
+- `src/talent-flow/`: Intake and summarization module (controllers, services, workers, DTOs)
