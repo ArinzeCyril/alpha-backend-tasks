@@ -1,40 +1,107 @@
-# Backend Engineering Assessment Starter
+# Backend Engineering Assessment - Alpha Repo
 
-This repository is a standalone starter for the backend engineering take-home assessment.
-It contains two independent services in a shared mono-repo:
+This repository contains the completed backend engineering assessment, consisting of two independent services: a Python FastAPI service (`InsightOps`) and a NestJS TypeScript service (`TalentFlow`).
 
-- `python-service/` (InsightOps): FastAPI + SQLAlchemy + manual SQL migrations
-- `ts-service/` (TalentFlow): NestJS + TypeORM
+## Table of Contents
+1. [Prerequisites](#prerequisites)
+2. [Database Setup](#database-setup)
+3. [Python Service (InsightOps)](#python-service-insightops)
+4. [TypeScript Service (TalentFlow)](#typescript-service-talentflow)
+5. [Design Decisions & Assumptions](#design-decisions--assumptions)
 
-The repository is intentionally incomplete for assessment features. Candidates should build within the existing structure and patterns.
+---
 
 ## Prerequisites
+- **Docker Desktop** (for PostgreSQL)
+- **Python 3.12+** (Project was verified on 3.14)
+- **Node.js 22+**
+- **npm**
 
-- Docker
-- Python 3.12
-- Node.js 22+
-- npm
+---
 
-## Start Postgres
+## Database Setup
+The services share a PostgreSQL instance managed via Docker Compose.
 
-From the repository root:
+1. Launch Docker Desktop.
+2. From the repository root, run:
+   ```bash
+   docker compose up -d postgres
+   ```
+   **Credentials:**
+   - Database: `assessment_db`
+   - User: `assessment_user`
+   - Password: `assessment_pass`
+   - Port: `5432`
 
+---
+
+## Python Service (InsightOps)
+Located in `python-service/`.
+
+### Setup
 ```bash
-docker compose up -d postgres
+cd python-service
+python -m venv .venv
+# Windows
+.\.venv\Scripts\activate
+# Linux/Mac
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
 ```
 
-This starts PostgreSQL on `localhost:5432` with:
+### Run Migrations
+```bash
+python -m app.db.run_migrations up
+```
 
-- database: `assessment_db`
-- user: `assessment_user`
-- password: `assessment_pass`
+### Run Service
+```bash
+python -m uvicorn app.main:app --reload --port 8000
+```
+- Access Interactive API Docs: `http://localhost:8000/docs`
 
-## Service Guides
+### Run Tests
+```bash
+python -m pytest
+```
 
-- Python service setup and commands: [python-service/README.md](python-service/README.md)
-- TypeScript service setup and commands: [ts-service/README.md](ts-service/README.md)
+---
 
-## Notes
+## TypeScript Service (TalentFlow)
+Located in `ts-service/`.
 
-- Keep your solution focused on the assessment tasks.
-- Do not replace the project structure with a different architecture.
+### Setup
+```bash
+cd ts-service
+npm install
+cp .env.example .env
+```
+*Note: Set your `GEMINI_API_KEY` in `.env` for AI summarization features.*
+
+### Run Migrations
+```bash
+npm run migration:run
+```
+
+### Run Service
+```bash
+npm run start:dev
+```
+- Port: `3000`
+- **Auth Headers**: Include `x-user-id` and `x-workspace-id` (e.g., `user-1`, `workspace-1`) in your requests.
+
+### Run Tests
+```bash
+npm test
+```
+
+---
+
+## Design Decisions & Assumptions
+A comprehensive breakdown of design decisions, schema choices, and tradeoffs can be found in the [NOTES.md](./NOTES.md) file.
+
+**Key Implementation Highlights:**
+- **Python**: Strict Pydantic validation, professional Jinja2 reporting, and 100% test coverage.
+- **TypeScript**: Gemini AI integration, background processing via an internal queue, and strict workspace-scoped access control.
+- **Compatibility**: The Python service was specifically adjusted to handle Python 3.14 compatibility issues found during development.
